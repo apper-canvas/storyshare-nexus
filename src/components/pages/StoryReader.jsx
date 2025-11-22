@@ -56,12 +56,10 @@ const StoryReader = () => {
     }
   };
 
-  const handleStartReading = () => {
-    toast.info("Chapter reading feature coming soon!");
-  };
-
-  const handleContinueReading = () => {
-    toast.info(`Continuing from chapter ${Math.floor(readingProgress / 20) + 1}...`);
+const handleContinueReading = () => {
+    const continueChapter = Math.floor(readingProgress / 20) + 1;
+    navigate(`/story/${storyId}/chapter/${continueChapter}`);
+    toast.success(`Continuing from chapter ${continueChapter}`);
   };
 
   if (loading) return <Loading />;
@@ -167,12 +165,16 @@ const StoryReader = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3">
-                {readingProgress > 0 ? (
+{readingProgress > 0 ? (
                   <Button size="lg" icon="Play" onClick={handleContinueReading}>
                     Continue Reading
                   </Button>
                 ) : (
-                  <Button size="lg" icon="BookOpen" onClick={handleStartReading}>
+                  <Button 
+                    size="lg" 
+                    icon="BookOpen" 
+                    onClick={() => navigate(`/story/${storyId}/chapter/1`)}
+                  >
                     Start Reading
                   </Button>
                 )}
@@ -196,10 +198,11 @@ const StoryReader = () => {
             <div className="mt-8">
               <h4 className="text-lg font-semibold text-gray-900 mb-4">Chapters</h4>
               <div className="space-y-3">
-                {Array.from({ length: story.chapterCount || 5 }, (_, index) => (
+{Array.from({ length: story.chapterCount || 5 }, (_, index) => (
                   <div 
                     key={index}
-                    className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-indigo-50 rounded-lg border border-slate-200 hover:shadow-sm transition-shadow duration-200"
+                    className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-50 to-indigo-50 rounded-lg border border-slate-200 hover:shadow-sm transition-shadow duration-200 cursor-pointer"
+                    onClick={() => navigate(`/story/${storyId}/chapter/${index + 1}`)}
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-sm font-semibold">
@@ -217,8 +220,12 @@ const StoryReader = () => {
                     <Button 
                       variant="ghost" 
                       size="sm"
-                      onClick={() => toast.info(`Reading Chapter ${index + 1}...`)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/story/${storyId}/chapter/${index + 1}`);
+                      }}
                     >
+                      <ApperIcon name="BookOpen" size={16} />
                       Read
                     </Button>
                   </div>

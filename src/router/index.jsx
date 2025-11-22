@@ -54,6 +54,10 @@ const mainRoutes = [
     element: withSuspense(StoryReader)
   },
   {
+    path: "story/:storyId/chapter/:chapterNumber",
+    element: withSuspense(lazy(() => import("@/components/pages/ChapterReader")))
+  },
+  {
     path: "story/:storyId/chapters",
     element: withSuspense(ChapterList)
   },

@@ -115,8 +115,29 @@ class ChapterService {
         this.chapters[chapterIndex].updatedAt = new Date().toISOString();
       }
     });
+return this.getByStoryId(storyId);
+  }
 
-    return this.getByStoryId(storyId);
+  async getNextChapter(storyId, currentChapterNumber) {
+    await delay(200);
+    const storyChapters = await this.getByStoryId(storyId);
+    const currentIndex = storyChapters.findIndex(c => c.chapterNumber === currentChapterNumber);
+    
+    if (currentIndex !== -1 && currentIndex < storyChapters.length - 1) {
+      return storyChapters[currentIndex + 1];
+    }
+    return null;
+  }
+
+  async getPreviousChapter(storyId, currentChapterNumber) {
+    await delay(200);
+    const storyChapters = await this.getByStoryId(storyId);
+    const currentIndex = storyChapters.findIndex(c => c.chapterNumber === currentChapterNumber);
+    
+    if (currentIndex > 0) {
+      return storyChapters[currentIndex - 1];
+    }
+    return null;
   }
 }
 
