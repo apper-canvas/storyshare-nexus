@@ -6,7 +6,7 @@ import Badge from "@/components/atoms/Badge";
 import Loading from "@/components/ui/Loading";
 import ErrorView from "@/components/ui/ErrorView";
 import ApperIcon from "@/components/ApperIcon";
-import { storyService } from "@/services/api/storyService";
+import storyService from "@/services/api/storyService";
 
 const StoryReader = () => {
   const { storyId } = useParams();
