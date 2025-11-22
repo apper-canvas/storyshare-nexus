@@ -313,7 +313,6 @@ return storiesWithDetails;
     
     const libraryData = JSON.parse(stored);
     const entry = libraryData.find(item => item.storyId === storyId);
-    return entry ? entry.status : null;
 return entry ? entry.status : null;
     } catch (error) {
       return null;
