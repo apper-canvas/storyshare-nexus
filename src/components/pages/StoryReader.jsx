@@ -13,21 +13,26 @@ const StoryReader = () => {
   const navigate = useNavigate();
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+const [error, setError] = useState("");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
-
+  const [libraryStatus, setLibraryStatus] = useState(null);
+  const [showLibraryDropdown, setShowLibraryDropdown] = useState(false);
   useEffect(() => {
     loadStory();
   }, [storyId]);
 
-  const loadStory = async () => {
+const loadStory = async () => {
     setLoading(true);
     setError("");
     
     try {
       const storyData = await storyService.getById(storyId);
       setStory(storyData);
+      
+      // Load library status
+      const status = await storyService.getLibraryStatus(parseInt(storyId));
+      setLibraryStatus(status);
       
       // Mock reading progress and bookmark status
       setReadingProgress(Math.floor(Math.random() * 100));
@@ -40,7 +45,7 @@ const StoryReader = () => {
     }
   };
 
-  const handleBookmark = async () => {
+const handleBookmark = async () => {
     try {
       if (isBookmarked) {
         await storyService.unbookmark(story.Id);
@@ -53,6 +58,55 @@ const StoryReader = () => {
       }
     } catch (error) {
       toast.error("Failed to update bookmark. Please try again.");
+    }
+  };
+
+  const handleAddToLibrary = async (status) => {
+    try {
+      if (libraryStatus === status) {
+        // Remove from library if same status selected
+        await storyService.removeFromLibrary(story.Id);
+        setLibraryStatus(null);
+        toast.success("Story removed from library.");
+      } else if (libraryStatus) {
+        // Update existing library status
+        await storyService.updateLibraryStatus(story.Id, status);
+        setLibraryStatus(status);
+        toast.success(`Story moved to ${getStatusLabel(status)}.`);
+      } else {
+        // Add to library with new status
+        await storyService.addToLibrary(story.Id, status);
+        setLibraryStatus(status);
+        toast.success(`Story added to ${getStatusLabel(status)}.`);
+      }
+      setShowLibraryDropdown(false);
+    } catch (error) {
+      toast.error("Failed to update library. Please try again.");
+    }
+  };
+
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case 'want-to-read': return 'Want to Read';
+      case 'currently-reading': return 'Currently Reading';
+      case 'completed': return 'Completed';
+      default: return '';
+    }
+  };
+
+  const getLibraryButtonText = () => {
+    if (libraryStatus) {
+      return getStatusLabel(libraryStatus);
+    }
+    return 'Add to Library';
+  };
+
+  const getLibraryButtonIcon = () => {
+    switch (libraryStatus) {
+      case 'want-to-read': return 'BookMarked';
+      case 'currently-reading': return 'BookOpen';
+      case 'completed': return 'CheckCircle';
+      default: return 'Plus';
     }
   };
 
@@ -164,8 +218,8 @@ const handleContinueReading = () => {
               )}
 
               {/* Action Buttons */}
-              <div className="flex gap-3">
-{readingProgress > 0 ? (
+<div className="flex flex-wrap gap-3">
+                {readingProgress > 0 ? (
                   <Button size="lg" icon="Play" onClick={handleContinueReading}>
                     Continue Reading
                   </Button>
@@ -178,10 +232,78 @@ const handleContinueReading = () => {
                     Start Reading
                   </Button>
                 )}
+                
+                {/* Library Button */}
+                <div className="relative">
+                  <Button 
+                    variant={libraryStatus ? "primary" : "secondary"} 
+                    size="lg" 
+                    icon={getLibraryButtonIcon()}
+                    onClick={() => setShowLibraryDropdown(!showLibraryDropdown)}
+                  >
+                    {getLibraryButtonText()}
+                  </Button>
+                  
+                  {showLibraryDropdown && (
+                    <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                      <button
+                        onClick={() => handleAddToLibrary('want-to-read')}
+                        className={`w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 ${
+                          libraryStatus === 'want-to-read' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'
+                        }`}
+                      >
+                        <ApperIcon name="BookMarked" size={16} />
+                        Want to Read
+                        {libraryStatus === 'want-to-read' && <ApperIcon name="Check" size={14} className="ml-auto" />}
+                      </button>
+                      <button
+                        onClick={() => handleAddToLibrary('currently-reading')}
+                        className={`w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 ${
+                          libraryStatus === 'currently-reading' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'
+                        }`}
+                      >
+                        <ApperIcon name="BookOpen" size={16} />
+                        Currently Reading
+                        {libraryStatus === 'currently-reading' && <ApperIcon name="Check" size={14} className="ml-auto" />}
+                      </button>
+                      <button
+                        onClick={() => handleAddToLibrary('completed')}
+                        className={`w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 ${
+                          libraryStatus === 'completed' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700'
+                        }`}
+                      >
+                        <ApperIcon name="CheckCircle" size={16} />
+                        Completed
+                        {libraryStatus === 'completed' && <ApperIcon name="Check" size={14} className="ml-auto" />}
+                      </button>
+                      {libraryStatus && (
+                        <>
+                          <div className="border-t border-gray-100 my-1"></div>
+                          <button
+                            onClick={() => handleAddToLibrary(libraryStatus)}
+                            className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-red-600"
+                          >
+                            <ApperIcon name="X" size={16} />
+                            Remove from Library
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
                 <Button variant="secondary" size="lg" icon="Share">
                   Share
                 </Button>
               </div>
+
+              {/* Click outside to close dropdown */}
+              {showLibraryDropdown && (
+                <div 
+                  className="fixed inset-0 z-40" 
+                  onClick={() => setShowLibraryDropdown(false)}
+                />
+              )}
             </div>
           </div>
 

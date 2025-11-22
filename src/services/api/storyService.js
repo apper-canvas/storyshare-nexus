@@ -1,5 +1,4 @@
 import storiesData from "@/services/mockData/stories.json";
-
 // Simulate API delay for realistic loading states
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -168,9 +167,158 @@ async updateReadingProgress(storyId, progress, userId = 1) {
     if (index !== -1) {
       this.stories[index].views = (this.stories[index].views || 0) + 1;
       return this.stories[index].views;
-    }
+}
     return 0;
   }
+
+  // Library Management
+  async addToLibrary(storyId, status = 'want-to-read') {
+    await new Promise(resolve => setTimeout(resolve, 500));
+  
+  if (!storyId || typeof storyId !== 'number') {
+    throw new Error('Valid story ID is required');
+  }
+
+  const validStatuses = ['want-to-read', 'currently-reading', 'completed'];
+  if (!validStatuses.includes(status)) {
+    throw new Error('Invalid library status');
+  }
+
+  // Get existing library data or initialize
+  let libraryData = [];
+  try {
+    const stored = localStorage.getItem('userLibrary');
+    if (stored) {
+      libraryData = JSON.parse(stored);
+    }
+  } catch (error) {
+    libraryData = [];
+  }
+
+  // Remove existing entry for this story
+  libraryData = libraryData.filter(item => item.storyId !== storyId);
+  
+  // Add new entry
+  libraryData.push({
+    storyId,
+    status,
+    addedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  });
+
+  localStorage.setItem('userLibrary', JSON.stringify(libraryData));
+  return { storyId, status };
 }
+
+  async removeFromLibrary(storyId) {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    if (!storyId || typeof storyId !== 'number') {
+      throw new Error('Valid story ID is required');
+  }
+
+  let libraryData = [];
+  try {
+    const stored = localStorage.getItem('userLibrary');
+    if (stored) {
+      libraryData = JSON.parse(stored);
+    }
+  } catch (error) {
+    return;
+  }
+
+libraryData = libraryData.filter(item => item.storyId !== storyId);
+    localStorage.setItem('userLibrary', JSON.stringify(libraryData));
+  }
+
+  async updateLibraryStatus(storyId, newStatus) {
+    await new Promise(resolve => setTimeout(resolve, 400));
+    
+    if (!storyId || typeof storyId !== 'number') {
+    throw new Error('Valid story ID is required');
+  }
+
+  const validStatuses = ['want-to-read', 'currently-reading', 'completed'];
+  if (!validStatuses.includes(newStatus)) {
+    throw new Error('Invalid library status');
+  }
+
+  let libraryData = [];
+  try {
+    const stored = localStorage.getItem('userLibrary');
+    if (stored) {
+      libraryData = JSON.parse(stored);
+    }
+  } catch (error) {
+    throw new Error('Failed to load library data');
+  }
+
+  const existingIndex = libraryData.findIndex(item => item.storyId === storyId);
+  if (existingIndex === -1) {
+    throw new Error('Story not found in library');
+  }
+
+  libraryData[existingIndex] = {
+    ...libraryData[existingIndex],
+    status: newStatus,
+    updatedAt: new Date().toISOString()
+  };
+
+localStorage.setItem('userLibrary', JSON.stringify(libraryData));
+    return { storyId, status: newStatus };
+  }
+
+  async getLibraryStories(status = null) {
+    await new Promise(resolve => setTimeout(resolve, 600));
+  let libraryData = [];
+  try {
+    const stored = localStorage.getItem('userLibrary');
+    if (stored) {
+      libraryData = JSON.parse(stored);
+    }
+  } catch (error) {
+    libraryData = [];
+  }
+
+  // Filter by status if provided
+  if (status) {
+    libraryData = libraryData.filter(item => item.status === status);
+  }
+
+  // Get story details for each library entry
+  const storiesWithDetails = [];
+  for (const item of libraryData) {
+    try {
+      const story = await this.getById(item.storyId);
+      storiesWithDetails.push({
+        ...story,
+        libraryStatus: item.status,
+        addedAt: item.addedAt,
+        updatedAt: item.updatedAt
+      });
+    } catch (error) {
+      // Skip stories that no longer exist
+      console.warn(`Story ${item.storyId} not found`);
+    }
+  }
+return storiesWithDetails;
+  }
+
+  async getLibraryStatus(storyId) {
+    if (!storyId) return null;
+    
+    try {
+    const stored = localStorage.getItem('userLibrary');
+    if (!stored) return null;
+    
+    const libraryData = JSON.parse(stored);
+    const entry = libraryData.find(item => item.storyId === storyId);
+    return entry ? entry.status : null;
+return entry ? entry.status : null;
+    } catch (error) {
+      return null;
+    }
+  }
+}
+
 // Export singleton instance
-export default new StoryService();

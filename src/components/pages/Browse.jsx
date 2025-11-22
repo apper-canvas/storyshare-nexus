@@ -247,7 +247,8 @@ const genres = [
               ? "Try adjusting your search criteria or filters." 
               : "Check back soon for new published stories!"
           }
-          emptyActionLabel="Clear Filters"
+emptyActionLabel="Clear Filters"
+          emptyIcon={searchQuery || selectedGenre ? "Search" : "BookOpen"}
           onEmptyAction={searchQuery || selectedGenre ? clearFilters : undefined}
         />
 

@@ -15,9 +15,10 @@ const StoryGrid = ({
   onStoryEdit,
   onStoryDelete,
   onRetry,
-  emptyTitle = "No stories found",
+emptyTitle = "No stories found",
   emptyDescription = "Start exploring to discover amazing stories!",
   emptyActionLabel,
+  emptyIcon = "BookOpen",
   onEmptyAction
 }) => {
   if (loading) {
@@ -28,14 +29,14 @@ const StoryGrid = ({
     return <ErrorView message={error} onRetry={onRetry} />;
   }
 
-  if (!stories || stories.length === 0) {
+if (!stories || stories.length === 0) {
     return (
       <Empty
         title={emptyTitle}
         description={emptyDescription}
         actionLabel={emptyActionLabel}
         onAction={onEmptyAction}
-        icon="BookOpen"
+        icon={emptyIcon}
       />
     );
   }
