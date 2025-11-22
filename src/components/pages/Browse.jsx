@@ -16,18 +16,22 @@ const Browse = () => {
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [sortBy, setSortBy] = useState("newest");
-  const genres = [
+const genres = [
     { value: "", label: "All Genres" },
-    { value: "fantasy", label: "Fantasy" },
     { value: "romance", label: "Romance" },
+    { value: "fantasy", label: "Fantasy" },
     { value: "mystery", label: "Mystery" },
     { value: "sci-fi", label: "Science Fiction" },
+    { value: "teen-fiction", label: "Teen Fiction" },
+    { value: "young-adult", label: "Young Adult" },
     { value: "thriller", label: "Thriller" },
     { value: "adventure", label: "Adventure" },
+    { value: "contemporary", label: "Contemporary" },
     { value: "drama", label: "Drama" },
     { value: "horror", label: "Horror" },
     { value: "comedy", label: "Comedy" },
-    { value: "historical", label: "Historical Fiction" }
+    { value: "historical", label: "Historical Fiction" },
+    { value: "non-fiction", label: "Non-Fiction" }
   ];
 
   const sortOptions = [
