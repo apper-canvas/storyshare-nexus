@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import StoryGrid from "@/components/organisms/StoryGrid";
-import CreateStoryModal from "@/components/organisms/CreateStoryModal";
+import { storyService } from "@/services/api/storyService";
+import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
-import ApperIcon from "@/components/ApperIcon";
-import { storyService } from "@/services/api/storyService";
+import StoryGrid from "@/components/organisms/StoryGrid";
+import CreateStoryModal from "@/components/organisms/CreateStoryModal";
 
 const MyStories = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
   useEffect(() => {
     loadMyStories();
   }, []);
@@ -76,14 +75,24 @@ const MyStories = () => {
 
   const handleRetry = () => {
     loadMyStories();
-  };
+};
 
   const getStoryStats = () => {
     const published = stories.filter(s => s.status === "published").length;
     const drafts = stories.filter(s => s.status === "draft").length;
     const totalViews = stories.reduce((sum, story) => sum + (story.views || 0), 0);
+    const totalStories = stories.length;
 
-    return { published, drafts, totalViews };
+    return { published, drafts, totalViews, totalStories };
+  };
+const handlePublishStory = async (story) => {
+    try {
+      const updatedStory = await storyService.publish(story.Id);
+      setStories(prev => prev.map(s => s.Id === story.Id ? updatedStory : s));
+      toast.success(`"${story.title}" published successfully!`);
+    } catch (error) {
+      toast.error("Failed to publish story. Please try again.");
+    }
   };
 
   const stats = getStoryStats();
@@ -160,7 +169,7 @@ const MyStories = () => {
             </div>
           </div>
 
-          <StoryGrid
+<StoryGrid
             stories={stories}
             loading={loading}
             error={error}
@@ -174,6 +183,12 @@ const MyStories = () => {
             onEmptyAction={() => setIsCreateModalOpen(true)}
           />
         </div>
+        {/* Create Story Modal */}
+        <CreateStoryModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onSubmit={handleCreateStory}
+        />
 
         {/* Writing Tips */}
         <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-100">
@@ -191,13 +206,7 @@ const MyStories = () => {
           </div>
         </div>
 
-        {/* Create Story Modal */}
-        <CreateStoryModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          onSubmit={handleCreateStory}
-        />
-      </div>
+</div>
     </div>
   );
 };

@@ -12,13 +12,12 @@ const SearchBar = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e) => {
     e.preventDefault();
-    if (onSearch) {
-      onSearch(value);
+    if (onSearch && value.trim()) {
+      onSearch(value.trim());
     }
   };
-
   return (
     <form onSubmit={handleSubmit} className={cn("relative w-full max-w-md", className)}>
       <div className={cn(

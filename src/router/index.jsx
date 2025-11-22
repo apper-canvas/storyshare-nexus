@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import Layout from "@/components/organisms/Layout";
 
 // Lazy load all page components
@@ -7,8 +7,8 @@ const Home = lazy(() => import("@/components/pages/Home"));
 const MyStories = lazy(() => import("@/components/pages/MyStories"));
 const Browse = lazy(() => import("@/components/pages/Browse"));
 const Library = lazy(() => import("@/components/pages/Library"));
+const StoryReader = lazy(() => import("@/components/pages/StoryReader"));
 const NotFound = lazy(() => import("@/components/pages/NotFound"));
-
 // Loading fallback component
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-indigo-50">
@@ -44,16 +44,20 @@ const mainRoutes = [
     path: "browse",
     element: withSuspense(Browse)
   },
+},
   {
     path: "library",
     element: withSuspense(Library)
+  },
+  {
+    path: "story/:storyId",
+    element: withSuspense(StoryReader)
   },
   {
     path: "*",
     element: withSuspense(NotFound)
   }
 ];
-
 // Create routes array
 const routes = [
   {

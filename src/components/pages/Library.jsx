@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import StoryGrid from "@/components/organisms/StoryGrid";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
 import ApperIcon from "@/components/ApperIcon";
 import { storyService } from "@/services/api/storyService";
-
 const Library = () => {
   const [savedStories, setSavedStories] = useState([]);
   const [readingHistory, setReadingHistory] = useState([]);
@@ -16,24 +16,18 @@ const Library = () => {
     loadLibraryData();
   }, []);
 
-  const loadLibraryData = async () => {
+const loadLibraryData = async () => {
     setLoading(true);
     setError("");
     
     try {
-      const allStories = await storyService.getAll();
-      
-      // Mock user library data - in real app this would come from user service
-      const mockSavedStories = allStories
-        .filter(story => story.status === "published")
-        .slice(0, 6);
-        
-      const mockReadingHistory = allStories
-        .filter(story => story.status === "published")
-        .slice(3, 9);
+      const [bookmarks, history] = await Promise.all([
+        storyService.getUserBookmarks(),
+        storyService.getReadingHistory()
+      ]);
 
-      setSavedStories(mockSavedStories);
-      setReadingHistory(mockReadingHistory);
+      setSavedStories(bookmarks);
+      setReadingHistory(history);
     } catch (err) {
       setError("Failed to load your library. Please try again.");
       console.error("Error loading library data:", err);
@@ -46,13 +40,20 @@ const Library = () => {
     loadLibraryData();
   };
 
-  const handleRemoveFromSaved = (storyId) => {
-    setSavedStories(prev => prev.filter(story => story.Id !== storyId));
+const handleRemoveFromSaved = async (storyId) => {
+    try {
+      await storyService.unbookmark(storyId);
+      setSavedStories(prev => prev.filter(story => story.Id !== storyId));
+      toast.success("Story removed from bookmarks.");
+    } catch (error) {
+      toast.error("Failed to remove bookmark. Please try again.");
+    }
   };
 
   const handleClearHistory = () => {
     if (confirm("Are you sure you want to clear your reading history?")) {
       setReadingHistory([]);
+      toast.info("Reading history cleared.");
     }
   };
 

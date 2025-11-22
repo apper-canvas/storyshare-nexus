@@ -1,9 +1,19 @@
 import React from "react";
-import { cn } from "@/utils/cn";
-import NavigationItem from "@/components/molecules/NavigationItem";
+import { useNavigate } from "react-router-dom";
 import ApperIcon from "@/components/ApperIcon";
-
+import Library from "@/components/pages/Library";
+import Browse from "@/components/pages/Browse";
+import Home from "@/components/pages/Home";
+import NavigationItem from "@/components/molecules/NavigationItem";
+import { cn } from "@/utils/cn";
 const Sidebar = ({ className, isOpen, onClose }) => {
+  const navigate = useNavigate();
+  
+  const handleStartWriting = () => {
+    navigate("/my-stories");
+    onClose(); // Close sidebar on mobile
+  };
+  
   return (
     <>
       {/* Mobile Overlay */}
@@ -70,10 +80,13 @@ const Sidebar = ({ className, isOpen, onClose }) => {
               </div>
               <p className="font-medium text-sm text-gray-900">Write & Share</p>
             </div>
-            <p className="text-xs text-gray-600 mb-3">
+<p className="text-xs text-gray-600 mb-3">
               Join thousands of writers sharing their stories with the world.
             </p>
-            <button className="w-full px-3 py-2 bg-gradient-to-r from-primary to-secondary text-white text-sm font-medium rounded-md hover:from-secondary hover:to-accent transition-all duration-200 transform hover:scale-105">
+            <button 
+              onClick={handleStartWriting}
+              className="w-full px-3 py-2 bg-gradient-to-r from-primary to-secondary text-white text-sm font-medium rounded-md hover:from-secondary hover:to-accent transition-all duration-200 transform hover:scale-105"
+            >
               Start Writing
             </button>
           </div>

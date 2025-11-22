@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { cn } from "@/utils/cn";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import Textarea from "@/components/atoms/Textarea";
 import Select from "@/components/atoms/Select";
 import ApperIcon from "@/components/ApperIcon";
-
 const CreateStoryModal = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -36,10 +36,21 @@ const CreateStoryModal = ({ isOpen, onClose, onSubmit }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.title.trim() || !formData.description.trim() || !formData.genre) {
+    if (!formData.title.trim()) {
+      toast.error("Please enter a story title.");
+      return;
+    }
+    
+    if (!formData.description.trim()) {
+      toast.error("Please enter a story description.");
+      return;
+    }
+    
+    if (!formData.genre) {
+      toast.error("Please select a genre.");
       return;
     }
 
@@ -56,6 +67,7 @@ const CreateStoryModal = ({ isOpen, onClose, onSubmit }) => {
       onClose();
     } catch (error) {
       console.error("Error creating story:", error);
+      toast.error("Failed to create story. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

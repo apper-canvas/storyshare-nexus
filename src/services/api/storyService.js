@@ -8,12 +8,11 @@ class StoryService {
     this.stories = [...storiesData];
   }
 
-  async getAll() {
+async getAll() {
     await delay(300);
     return [...this.stories];
   }
-
-  async getById(id) {
+async getById(id) {
     await delay(200);
     const story = this.stories.find(s => s.Id === parseInt(id));
     if (!story) {
@@ -22,17 +21,15 @@ class StoryService {
     return { ...story };
   }
 
-  async getByAuthorId(authorId) {
+async getByAuthor(authorId) {
     await delay(250);
     return this.stories.filter(s => s.authorId === authorId).map(s => ({ ...s }));
   }
-
-  async getByGenre(genre) {
+async getByGenre(genre) {
     await delay(300);
     return this.stories.filter(s => s.genre.toLowerCase() === genre.toLowerCase()).map(s => ({ ...s }));
   }
-
-  async getFeatured() {
+async getTrending() {
     await delay(350);
     return this.stories
       .filter(s => s.status === "published")
@@ -40,8 +37,7 @@ class StoryService {
       .slice(0, 8)
       .map(s => ({ ...s }));
   }
-
-  async getTrending() {
+async getFeatured() {
     await delay(400);
     return this.stories
       .filter(s => s.status === "published")
@@ -49,8 +45,7 @@ class StoryService {
       .slice(0, 12)
       .map(s => ({ ...s }));
   }
-
-  async create(storyData) {
+async create(storyData) {
     await delay(500);
     
     // Find the highest Id and add 1
@@ -60,55 +55,111 @@ class StoryService {
     const newStory = {
       Id: newId,
       ...storyData,
+      authorId: 1, // Current user ID - in real app this would come from auth
+      authorName: "Current User", // In real app this would come from user profile
+      status: "draft",
+      views: 0,
+      chapterCount: 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
     this.stories.unshift(newStory);
     return { ...newStory };
-  }
+}
 
   async update(id, updateData) {
     await delay(400);
     
-    const index = this.stories.findIndex(s => s.Id === parseInt(id));
-    if (index === -1) {
+    const storyIndex = this.stories.findIndex(s => s.Id === parseInt(id));
+    if (storyIndex === -1) {
       throw new Error("Story not found");
     }
 
-    this.stories[index] = {
-      ...this.stories[index],
+    this.stories[storyIndex] = {
+      ...this.stories[storyIndex],
       ...updateData,
       updatedAt: new Date().toISOString()
     };
 
-    return { ...this.stories[index] };
+    return { ...this.stories[storyIndex] };
   }
 
   async delete(id) {
     await delay(300);
     
-    const index = this.stories.findIndex(s => s.Id === parseInt(id));
-    if (index === -1) {
+    const storyIndex = this.stories.findIndex(s => s.Id === parseInt(id));
+    if (storyIndex === -1) {
       throw new Error("Story not found");
     }
 
-    this.stories.splice(index, 1);
-    return true;
+    const deletedStory = this.stories.splice(storyIndex, 1)[0];
+    return { ...deletedStory };
   }
 
-  async search(query) {
-    await delay(350);
+  async publish(id) {
+    await delay(400);
+    return this.update(id, { status: "published" });
+  }
+
+  async unpublish(id) {
+    await delay(400);
+    return this.update(id, { status: "draft" });
+}
+
+  async search(searchTerm) {
+    await delay(300);
+    const term = searchTerm.toLowerCase();
     
-    const searchTerm = query.toLowerCase();
     return this.stories
-      .filter(story =>
-        story.title.toLowerCase().includes(searchTerm) ||
-        story.description.toLowerCase().includes(searchTerm) ||
-        story.authorName.toLowerCase().includes(searchTerm) ||
-        story.genre.toLowerCase().includes(searchTerm)
+      .filter(story => 
+        story.title.toLowerCase().includes(term) ||
+        story.description.toLowerCase().includes(term) ||
+        story.authorName.toLowerCase().includes(term) ||
+        story.genre.toLowerCase().includes(term)
       )
       .map(s => ({ ...s }));
+  }
+
+  // Social features
+  async bookmark(storyId, userId = 1) {
+    await delay(200);
+    // In real app, this would save to user's bookmarks
+    console.log(`User ${userId} bookmarked story ${storyId}`);
+    return { success: true };
+  }
+
+  async unbookmark(storyId, userId = 1) {
+    await delay(200);
+    // In real app, this would remove from user's bookmarks
+    console.log(`User ${userId} unbookmarked story ${storyId}`);
+    return { success: true };
+  }
+
+  async getUserBookmarks(userId = 1) {
+    await delay(300);
+    // Return mock bookmarked stories
+    return this.stories
+      .filter(s => s.status === "published")
+      .slice(0, 6)
+      .map(s => ({ ...s }));
+  }
+
+  async getReadingHistory(userId = 1) {
+    await delay(250);
+    // Return mock reading history
+    return this.stories
+      .filter(s => s.status === "published")
+      .slice(3, 9)
+      .map(s => ({ ...s }));
+  }
+
+  async updateReadingProgress(storyId, progress, userId = 1) {
+    await delay(200);
+    // In real app, this would save reading progress
+    console.log(`User ${userId} progress on story ${storyId}: ${progress}%`);
+    return { success: true };
+return { success: true };
   }
 
   async incrementViews(id) {
@@ -122,5 +173,3 @@ class StoryService {
     return 0;
   }
 }
-
-export const storyService = new StoryService();

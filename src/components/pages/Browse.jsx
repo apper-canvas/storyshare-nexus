@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import StoryGrid from "@/components/organisms/StoryGrid";
 import Button from "@/components/atoms/Button";
 import Select from "@/components/atoms/Select";
@@ -6,16 +7,15 @@ import Badge from "@/components/atoms/Badge";
 import SearchBar from "@/components/molecules/SearchBar";
 import ApperIcon from "@/components/ApperIcon";
 import { storyService } from "@/services/api/storyService";
-
 const Browse = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [stories, setStories] = useState([]);
   const [filteredStories, setFilteredStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [sortBy, setSortBy] = useState("newest");
-
   const genres = [
     { value: "", label: "All Genres" },
     { value: "fantasy", label: "Fantasy" },

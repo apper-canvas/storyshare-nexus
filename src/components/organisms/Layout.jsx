@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "@/components/organisms/Sidebar";
 import Header from "@/components/organisms/Header";
+import Sidebar from "@/components/organisms/Sidebar";
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -15,13 +15,15 @@ const Layout = () => {
     setIsSidebarOpen(false);
   };
 
-  const handleSearchChange = (e) => {
+const handleSearchChange = (e) => {
     setSearchValue(e.target.value);
   };
 
   const handleSearch = (query) => {
-    console.log("Searching for:", query);
-    // TODO: Implement search functionality
+    if (query.trim()) {
+      // Navigate to browse page with search query
+      window.location.href = `/browse?search=${encodeURIComponent(query.trim())}`;
+    }
   };
 
   return (

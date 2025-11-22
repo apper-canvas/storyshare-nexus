@@ -11,6 +11,12 @@ const Header = ({
   onSearch,
   className 
 }) => {
+  
+  const handleSearchSubmit = (query) => {
+    if (query.trim()) {
+      window.location.href = `/browse?search=${encodeURIComponent(query.trim())}`;
+    }
+  };
   return (
     <header className={cn(
       "bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-30",
@@ -35,12 +41,12 @@ const Header = ({
           </h1>
         </div>
 
-        {/* Search Bar */}
+{/* Search Bar */}
         <div className="hidden sm:flex flex-1 justify-center max-w-2xl mx-4">
           <SearchBar
             value={searchValue}
             onChange={onSearchChange}
-            onSearch={onSearch}
+            onSearch={handleSearchSubmit}
             placeholder="Search stories, authors, genres..."
             className="w-full"
           />
@@ -71,12 +77,12 @@ const Header = ({
         </div>
       </div>
 
-      {/* Mobile Search Bar */}
+{/* Mobile Search Bar */}
       <div className="sm:hidden px-4 pb-4">
         <SearchBar
           value={searchValue}
           onChange={onSearchChange}
-          onSearch={onSearch}
+          onSearch={handleSearchSubmit}
           placeholder="Search stories..."
         />
       </div>

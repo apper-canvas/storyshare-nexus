@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { cn } from "@/utils/cn";
-import Badge from "@/components/atoms/Badge";
 import ApperIcon from "@/components/ApperIcon";
+import Badge from "@/components/atoms/Badge";
+import { cn } from "@/utils/cn";
 
 const StoryCard = ({ 
   story, 
@@ -14,16 +14,16 @@ const StoryCard = ({
   ...props 
 }) => {
   const navigate = useNavigate();
-
-  const handleClick = () => {
+const handleClick = () => {
     if (onClick) {
       onClick(story);
     } else {
+      // Navigate to story reading page
       navigate(`/story/${story.Id}`);
     }
   };
 
-  const handleEdit = (e) => {
+const handleEdit = (e) => {
     e.stopPropagation();
     if (onEdit) onEdit(story);
   };

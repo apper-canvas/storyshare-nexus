@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
-import StoryGrid from "@/components/organisms/StoryGrid";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { storyService } from "@/services/api/storyService";
+import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
-import ApperIcon from "@/components/ApperIcon";
-import { storyService } from "@/services/api/storyService";
-
+import StoryGrid from "@/components/organisms/StoryGrid";
+import Browse from "@/components/pages/Browse";
 const Home = () => {
+  const navigate = useNavigate();
   const [featuredStories, setFeaturedStories] = useState([]);
   const [trendingStories, setTrendingStories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,9 +47,19 @@ const Home = () => {
     }
   };
 
-  const handleRetry = () => {
+const handleRetry = () => {
     loadHomeData();
   };
+
+  const handleBrowseStories = () => {
+    navigate("/browse");
+    toast.info("Explore thousands of amazing stories!");
+  };
+
+  const handleStartWriting = () => {
+    navigate("/my-stories");
+    toast.info("Start your writing journey today!");
+};
 
   if (loading) {
     return (
@@ -92,11 +105,11 @@ const Home = () => {
               Join thousands of readers and writers in a community where imagination comes to life. 
               Find your next favorite story or share your own masterpiece.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" icon="Search" className="shadow-xl">
+<div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" icon="Search" className="shadow-xl" onClick={handleBrowseStories}>
                 Browse Stories
               </Button>
-              <Button size="lg" variant="secondary" icon="Edit3" className="shadow-xl">
+              <Button size="lg" variant="secondary" icon="Edit3" className="shadow-xl" onClick={handleStartWriting}>
                 Start Writing
               </Button>
             </div>
