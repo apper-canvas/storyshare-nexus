@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import storyService from "@/services/api/storyService";
 import ApperIcon from "@/components/ApperIcon";
@@ -8,6 +9,7 @@ import StoryGrid from "@/components/organisms/StoryGrid";
 import CreateStoryModal from "@/components/organisms/CreateStoryModal";
 
 const MyStories = () => {
+  const navigate = useNavigate();
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -53,9 +55,8 @@ const MyStories = () => {
     }
   };
 
-  const handleEditStory = (story) => {
-    console.log("Editing story:", story);
-    toast.info(`Editing "${story.title}" - Feature coming soon!`);
+const handleEditStory = (story) => {
+    navigate(`/story/${story.Id}/chapters`);
   };
 
   const handleDeleteStory = async (story) => {

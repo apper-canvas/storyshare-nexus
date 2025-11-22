@@ -8,6 +8,7 @@ const MyStories = lazy(() => import("@/components/pages/MyStories"));
 const Browse = lazy(() => import("@/components/pages/Browse"));
 const Library = lazy(() => import("@/components/pages/Library"));
 const StoryReader = lazy(() => import("@/components/pages/StoryReader"));
+const ChapterList = lazy(() => import("@/components/pages/ChapterList"));
 const NotFound = lazy(() => import("@/components/pages/NotFound"));
 // Loading fallback component
 const PageLoader = () => (
@@ -48,9 +49,13 @@ const mainRoutes = [
     path: "library",
     element: withSuspense(Library)
   },
-  {
+{
     path: "story/:storyId",
     element: withSuspense(StoryReader)
+  },
+  {
+    path: "story/:storyId/chapters",
+    element: withSuspense(ChapterList)
   },
   {
     path: "*",

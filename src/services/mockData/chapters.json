@@ -1,0 +1,42 @@
+[
+  {
+    "Id": 1,
+    "storyId": 1,
+    "chapterNumber": 1,
+    "title": "The Beginning",
+    "content": "It was a crisp autumn morning when Sarah first discovered the hidden library. The old building stood at the corner of Maple and Third, its weathered brick facade telling stories of countless years. As she pushed open the heavy wooden door, the scent of aged paper and leather bindings enveloped her like a warm embrace.\n\nThe interior was dimly lit, with tall shelves stretching toward the ceiling, each one packed with books that seemed to whisper secrets of the past. Sarah had always been drawn to places like this – quiet sanctuaries where time seemed to slow down and imagination could run free.\n\nLittle did she know that this discovery would change her life forever.",
+    "wordCount": 142,
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 2,
+    "storyId": 1,
+    "chapterNumber": 2,
+    "title": "The Librarian",
+    "content": "Behind the front desk sat an elderly man with kind eyes and a gentle smile. His silver hair was neatly combed, and he wore a cardigan that had seen many seasons. When he looked up from his work, Sarah felt an immediate sense of comfort.\n\n'Welcome,' he said in a voice that carried the warmth of countless stories. 'I'm Mr. Fitzgerald, the librarian here. Are you looking for anything in particular?'\n\nSarah explained that she had just discovered the library and was curious to explore. Mr. Fitzgerald's eyes lit up with delight, and he began to share the history of this special place.",
+    "wordCount": 118,
+    "createdAt": "2024-01-16T10:30:00.000Z",
+    "updatedAt": "2024-01-16T10:30:00.000Z"
+  },
+  {
+    "Id": 3,
+    "storyId": 2,
+    "chapterNumber": 1,
+    "title": "Departure",
+    "content": "The space station gleamed against the star-filled backdrop of the cosmos. Commander Elena Vasquez stood at the observation deck, watching Earth slowly rotate below. This would be her last view of home for the next three years as the deep space exploration mission began.\n\nThe crew had trained for this moment for over five years, but nothing could truly prepare them for the reality of leaving everything they knew behind. The mission to explore the outer reaches of the solar system was humanity's most ambitious undertaking yet.\n\nAs the engines hummed to life, Elena felt a mix of excitement and apprehension. They were about to venture into the unknown.",
+    "wordCount": 128,
+    "createdAt": "2024-01-20T14:15:00.000Z",
+    "updatedAt": "2024-01-20T14:15:00.000Z"
+  },
+  {
+    "Id": 4,
+    "storyId": 3,
+    "chapterNumber": 1,
+    "title": "The New Student",
+    "content": "Maya adjusted her backpack nervously as she walked through the halls of Riverside High. Moving to a new town in the middle of sophomore year was never easy, but her father's job had given them no choice. The hallways buzzed with the energy of teenagers who had known each other since kindergarten.\n\nShe checked her schedule one more time – first period, Advanced Chemistry with Mrs. Patterson. At least science was something she was confident about. As she searched for room 237, Maya hoped she could find her place in this new environment and maybe even make a few friends along the way.",
+    "wordCount": 105,
+    "createdAt": "2024-01-22T08:45:00.000Z",
+    "updatedAt": "2024-01-22T08:45:00.000Z"
+  }
+]
