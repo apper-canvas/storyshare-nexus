@@ -40,11 +40,10 @@ const mainRoutes = [
     path: "my-stories",
     element: withSuspense(MyStories)
   },
-  {
+{
     path: "browse",
     element: withSuspense(Browse)
   },
-},
   {
     path: "library",
     element: withSuspense(Library)
