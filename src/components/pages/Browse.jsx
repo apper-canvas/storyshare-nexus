@@ -6,7 +6,7 @@ import Select from "@/components/atoms/Select";
 import Badge from "@/components/atoms/Badge";
 import SearchBar from "@/components/molecules/SearchBar";
 import ApperIcon from "@/components/ApperIcon";
-import { storyService } from "@/services/api/storyService";
+import storyService from "@/services/api/storyService";
 const Browse = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [stories, setStories] = useState([]);
