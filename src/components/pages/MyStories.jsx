@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { storyService } from "@/services/api/storyService";
+import storyService from "@/services/api/storyService";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
@@ -167,9 +167,9 @@ const handlePublishStory = async (story) => {
             <div className="flex items-center gap-2">
               <Badge variant="primary" size="sm">{stories.length} total</Badge>
             </div>
-          </div>
+</div>
 
-<StoryGrid
+          <StoryGrid
             stories={stories}
             loading={loading}
             error={error}
