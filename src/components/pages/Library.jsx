@@ -4,7 +4,8 @@ import StoryGrid from "@/components/organisms/StoryGrid";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
 import ApperIcon from "@/components/ApperIcon";
-import { storyService } from "@/services/api/storyService";
+import storyService from "@/services/api/storyService";
+
 const Library = () => {
   const [savedStories, setSavedStories] = useState([]);
   const [readingHistory, setReadingHistory] = useState([]);
@@ -12,11 +13,7 @@ const Library = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    loadLibraryData();
-  }, []);
-
-const loadLibraryData = async () => {
+  const loadLibraryData = async () => {
     setLoading(true);
     setError("");
     
@@ -34,13 +31,17 @@ const loadLibraryData = async () => {
     } finally {
       setLoading(false);
     }
-  };
+};
+
+  useEffect(() => {
+    loadLibraryData();
+  }, []);
 
   const handleRetry = () => {
     loadLibraryData();
   };
 
-const handleRemoveFromSaved = async (storyId) => {
+  const handleRemoveFromSaved = async (storyId) => {
     try {
       await storyService.unbookmark(storyId);
       setSavedStories(prev => prev.filter(story => story.Id !== storyId));
