@@ -154,12 +154,11 @@ async create(storyData) {
       .map(s => ({ ...s }));
   }
 
-  async updateReadingProgress(storyId, progress, userId = 1) {
+async updateReadingProgress(storyId, progress, userId = 1) {
     await delay(200);
     // In real app, this would save reading progress
     console.log(`User ${userId} progress on story ${storyId}: ${progress}%`);
     return { success: true };
-return { success: true };
   }
 
   async incrementViews(id) {
@@ -173,3 +172,5 @@ return { success: true };
     return 0;
   }
 }
+// Export singleton instance
+export default new StoryService();
